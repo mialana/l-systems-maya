@@ -32,12 +32,12 @@ set(GLOBAL_CMAKE_SOURCE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake") # make 
 
 # create a joined string variable for CMake modules
 set(GLOBAL_CMAKE_MODULE_FILES
-    ${CMAKE_SOURCE_MODULE_PATH}/FindMaya.cmake
-    ${CMAKE_SOURCE_MODULE_PATH}/CoreUtils.cmake
+    ${GLOBAL_CMAKE_SOURCE_MODULE_PATH}/FindMaya.cmake
+    ${GLOBAL_CMAKE_SOURCE_MODULE_PATH}/CoreUtils.cmake
 )
 
 # include cmake module files
-include(${CMAKE_SOURCE_MODULE_PATH}/CoreUtils.cmake)
+include(${GLOBAL_CMAKE_SOURCE_MODULE_PATH}/CoreUtils.cmake)
 
 add_subdirectory(LSystem)
 add_subdirectory(LSystemMaya)

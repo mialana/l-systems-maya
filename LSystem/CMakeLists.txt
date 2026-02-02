@@ -3,21 +3,24 @@ cmake_minimum_required(VERSION 3.22)
 project(${Lsystem_TARGET_NAME})
 
 # Add source files to the project
-set(${LsystemMaya_TARGET_NAME}_SOURCE_FILES
+set(${Lsystem_TARGET_NAME}_SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/LSystem.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/vec.cpp
+    CACHE STRING "${Lsystem_TARGET_NAME} Saved Sources" # make source files available in other projects
 )
 
 # Add header files to the project
-set(${LsystemMaya_TARGET_NAME}_HEADER_FILES
+set(${Lsystem_TARGET_NAME}_HEADER_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/LSystem.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/matrix.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/vec.h
+    CACHE STRING "${Lsystem_TARGET_NAME} Saved Headers" # make header files available in other projects
 )
 
+
 # Create the executable
-add_executable(${Lsystem_TARGET_NAME} ${LsystemMaya_TARGET_NAME}_SOURCE_FILES ${LsystemMaya_TARGET_NAME}_HEADER_FILES)
+add_executable(${Lsystem_TARGET_NAME} ${SOURCES} ${${Lsystem_TARGET_NAME}_HEADER_FILES})
 
 # Set additional configurations for the executable
 target_include_directories(${Lsystem_TARGET_NAME} PRIVATE

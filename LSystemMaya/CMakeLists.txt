@@ -9,27 +9,28 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 # Add source files to the project
-set(${LsystemMaya_TARGET_NAME}_SOURCE_FILES
-src/cylinder.cpp
-src/LSystemCmd.cpp
-src/PluginMain.cpp
-${LSystem_SOURCE_DIR}/LSystem.cpp
-${LSystem_SOURCE_DIR}/vec.cpp
+set(SOURCES
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cylinder.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/LSystemCmd.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/PluginMain.cpp
+    ${${Lsystem_TARGET_NAME}_SOURCE_FILES}
 )
 
 
 # Add header files to the project
-set(${LsystemMaya_TARGET_NAME}_HEADER_FILES
-    src/cylinder.h
-    src/LSystemCmd.h
+set(HEADERS
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cylinder.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/LSystemCmd.h
     ${LSystem_SOURCE_DIR}/LSystem.h
     ${LSystem_SOURCE_DIR}/matrix.h
     ${LSystem_SOURCE_DIR}/vec.h
+    ${${Lsystem_TARGET_NAME}_HEADER_FILES}
 )
 
+set(CMAKE_MODULE_PATH ${GLOBAL_CMAKE_SOURCE_MODULE_PATH})
 find_package(Maya REQUIRED)
 
-add_library(${LsystemMaya_TARGET_NAME} SHARED ${LsystemMaya_TARGET_NAME}_SOURCE_FILES ${LsystemMaya_TARGET_NAME}_HEADER_FILES)
+add_library(${LsystemMaya_TARGET_NAME} SHARED ${SOURCES} ${HEADERS})
 
 target_link_libraries(${LsystemMaya_TARGET_NAME} PRIVATE Maya::Maya)
 target_include_directories(${LsystemMaya_TARGET_NAME} 
