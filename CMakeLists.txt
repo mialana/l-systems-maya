@@ -19,7 +19,7 @@ endif()
 string(REPLACE "\\" "/" GLOBAL_INSTALL_PREFIX ${GLOBAL_INSTALL_PREFIX})
 set(CMAKE_INSTALL_PREFIX "${GLOBAL_INSTALL_PREFIX}/plug-ins") # set the built-in install variable
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 set(CMAKE_VS_INCLUDE_INSTALL_TO_DEFAULT_BUILD ON) # ensure VS always includes `INSTALL` as a target
