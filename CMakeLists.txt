@@ -19,13 +19,10 @@ endif()
 string(REPLACE "\\" "/" GLOBAL_INSTALL_PREFIX ${GLOBAL_INSTALL_PREFIX})
 set(CMAKE_INSTALL_PREFIX "${GLOBAL_INSTALL_PREFIX}/plug-ins") # set the built-in install variable
 
-
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
-set(CMAKE_CUDA_STANDARD_REQUIRED ON)
 
 set(CMAKE_VS_INCLUDE_INSTALL_TO_DEFAULT_BUILD ON) # ensure VS always includes `INSTALL` as a target
-
 
 # set global variables
 set(LSystem_SOURCE_DIR ${CMAKE_SOURCE_DIR}/LSystem/src) # base code
@@ -42,8 +39,8 @@ set(GLOBAL_CMAKE_MODULE_FILES
     ${GLOBAL_CMAKE_SOURCE_MODULE_PATH}/CoreUtils.cmake
 )
 
-# include cmake module files
-include(${GLOBAL_CMAKE_SOURCE_MODULE_PATH}/CoreUtils.cmake)
-
 add_subdirectory(LSystem)
 add_subdirectory(LSystemMaya)
+
+
+set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT INSTALL)

@@ -20,7 +20,7 @@ set(${Lsystem_TARGET_NAME}_HEADER_FILES
 
 
 # Create the executable
-add_executable(${Lsystem_TARGET_NAME} ${SOURCES} ${${Lsystem_TARGET_NAME}_HEADER_FILES})
+add_executable(${Lsystem_TARGET_NAME} ${${Lsystem_TARGET_NAME}_SOURCE_FILES} ${${Lsystem_TARGET_NAME}_HEADER_FILES})
 
 # Set additional configurations for the executable
 target_include_directories(${Lsystem_TARGET_NAME} PRIVATE
