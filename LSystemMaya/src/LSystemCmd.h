@@ -9,8 +9,13 @@ class LSystemCmd : public MPxCommand
 public:
     LSystemCmd();
     virtual ~LSystemCmd();
-    static void* creator() { return new LSystemCmd(); }
-    MStatus doIt( const MArgList& args );
+
+    static void* creator()
+    {
+        return new LSystemCmd();
+    }
+
+    MStatus doIt(const MArgList& args);
 };
 
 #endif

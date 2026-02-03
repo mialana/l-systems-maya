@@ -18,14 +18,15 @@
 
 #include "LSystemCmd.h"
 
-MStatus initializePlugin( MObject obj )
+MStatus initializePlugin(MObject obj)
 {
-    MStatus   status = MStatus::kSuccess;
-    MFnPlugin plugin( obj, "MyPlugin", "1.0", "Any");
+    MStatus status = MStatus::kSuccess;
+    MFnPlugin plugin(obj, "MyPlugin", "1.0", "Any");
 
     // Register Command
-    status = plugin.registerCommand( "LSystemCmd", LSystemCmd::creator );
-    if (!status) {
+    status = plugin.registerCommand("LSystemCmd", LSystemCmd::creator);
+    if (!status)
+    {
         status.perror("registerCommand");
         return status;
     }
@@ -33,18 +34,17 @@ MStatus initializePlugin( MObject obj )
     return status;
 }
 
-MStatus uninitializePlugin( MObject obj)
+MStatus uninitializePlugin(MObject obj)
 {
-    MStatus   status = MStatus::kSuccess;
-    MFnPlugin plugin( obj );
+    MStatus status = MStatus::kSuccess;
+    MFnPlugin plugin(obj);
 
-    status = plugin.deregisterCommand( "LSystemCmd" );
-    if (!status) {
-	    status.perror("deregisterCommand");
-	    return status;
+    status = plugin.deregisterCommand("LSystemCmd");
+    if (!status)
+    {
+        status.perror("deregisterCommand");
+        return status;
     }
 
     return status;
 }
-
-

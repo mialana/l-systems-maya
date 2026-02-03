@@ -15,15 +15,9 @@ public:
     CylinderMesh(const MPoint& start, const MPoint& end, double r = 0.25);
     ~CylinderMesh();
 
-    void getMesh(
-        MPointArray& points, 
-        MIntArray& faceCounts, 
-        MIntArray& faceConnects);
-    
-    void appendToMesh(
-        MPointArray& points, 
-        MIntArray& faceCounts, 
-        MIntArray& faceConnects);
+    void getMesh(MPointArray& points, MIntArray& faceCounts, MIntArray& faceConnects);
+
+    void appendToMesh(MPointArray& points, MIntArray& faceCounts, MIntArray& faceConnects);
 
 protected:
     void transform(MPointArray& points, MVectorArray& normals);

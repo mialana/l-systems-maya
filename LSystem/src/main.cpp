@@ -3,7 +3,7 @@
 #include <iostream>
 #include "LSystem.h"
 
-int main(int argc, char **argv)
+int main(int argc, char** argv)
 {
     LSystem system;
     system.loadProgramFromString("F\nF->F[+F]F[-F]F");
@@ -17,5 +17,5 @@ int main(int argc, char **argv)
         std::vector<LSystem::Branch> branches;
         system.process(i, branches);
     }
-    return 0;      
+    return 0;
 }

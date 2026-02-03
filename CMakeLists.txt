@@ -6,13 +6,19 @@ if (NOT EXISTS "${MAYA_LOCATION}" AND NOT EXISTS "$ENV{MAYA_LOCATION}")
   message(FATAL_ERROR "'MAYA_LOCATION' variable needs to be set either through env or CMake.")
 endif()
 
+# query devkit location from both env and regular cmake variables
 if(DEFINED ENV{DEVKIT_LOCATION} AND NOT "$ENV{DEVKIT_LOCATION}" STREQUAL "")
-    set(_PREFIX "$ENV{DEVKIT_LOCATION}")
+    set(GLOBAL_INSTALL_PREFIX "$ENV{DEVKIT_LOCATION}")
 elseif(DEFINED DEVKIT_LOCATION)
-    set(_PREFIX "${DEVKIT_LOCATION}")
+    set(GLOBAL_INSTALL_PREFIX "${DEVKIT_LOCATION}")
 else()
     message(FATAL_ERROR "Set 'DEVKIT_LOCATION' as an env variable or in CMake to install directly into plug-in search path.")
 endif()
+
+# normalize the path if needed on windows
+string(REPLACE "\\" "/" GLOBAL_INSTALL_PREFIX ${GLOBAL_INSTALL_PREFIX})
+set(CMAKE_INSTALL_PREFIX "${GLOBAL_INSTALL_PREFIX}/plug-ins") # set the built-in install variable
+
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)

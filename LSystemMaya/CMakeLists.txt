@@ -40,4 +40,5 @@ target_include_directories(${LsystemMaya_TARGET_NAME}
 )
 MAYA_PLUGIN(${LsystemMaya_TARGET_NAME})
 
-install(TARGETS ${LsystemMaya_TARGET_NAME} ${MAYA_TARGET_TYPE} DESTINATION plug-ins/${MAYA_VERSION})
+# install directly into plug-in path
+install(TARGETS ${LsystemMaya_TARGET_NAME} ${MAYA_TARGET_TYPE} DESTINATION "plug-ins")
