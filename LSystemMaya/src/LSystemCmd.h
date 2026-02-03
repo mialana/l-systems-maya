@@ -1,7 +1,7 @@
-#ifndef CreateLSystemCmd_H_
-#define CreateLSystemCmd_H_
+#pragma once
 
 #include <maya/MPxCommand.h>
+#include <maya/MFnNurbsCurve.h>
 #include <string>
 
 class LSystemCmd : public MPxCommand
@@ -15,7 +15,10 @@ public:
         return new LSystemCmd();
     }
 
+    MStatus extrudeCurveFn();
+    MStatus makeCurveFn();
     MStatus doIt(const MArgList& args);
-};
 
-#endif
+private:
+    MFnNurbsCurve mCurveFn;
+};
