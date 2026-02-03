@@ -44,7 +44,7 @@ target_include_directories(${LsystemMaya_TARGET_NAME}
 
 
 _MAKE_SOURCE_GROUP_MSVC(${LsystemMaya_TARGET_NAME} "${GLOBAL_CMAKE_MODULE_FILES}" 
-    "${GLOBAL_CMAKE_SOURCE_MODULE_PATH}" "_cmake" "ON" "ON")
+    "${GLOBAL_CMAKE_SOURCE_MODULE_PATH}" "cmake_modules" "ON" "ON")
 
 _MAKE_SOURCE_GROUP_MSVC(${LsystemMaya_TARGET_NAME} "${${Lsystem_TARGET_NAME}_HEADER_FILES}" 
     "${LSystem_SOURCE_DIR}" "core/Header Files" "OFF" "OFF"
