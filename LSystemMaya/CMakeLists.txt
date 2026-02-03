@@ -55,5 +55,36 @@ _MAKE_SOURCE_GROUP_MSVC(${LsystemMaya_TARGET_NAME} "${${Lsystem_TARGET_NAME}_SOU
 
 MAYA_PLUGIN(${LsystemMaya_TARGET_NAME})
 
+set(MEL_SCRIPTS ${CMAKE_CURRENT_SOURCE_DIR}/bin/LSystem_gui.mel)
+
 # install directly into plug-in path
 install(TARGETS ${LsystemMaya_TARGET_NAME} ${MAYA_TARGET_TYPE} DESTINATION "plug-ins")
+
+foreach(mel_script IN LISTS MEL_SCRIPTS)
+    get_filename_component(mel_script_name "${mel_script}" NAME)
+    get_filename_component(mel_script_name_no_ext "${mel_script}" NAME_WE)
+
+    set(mel_script_output_path ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/$<CONFIG>/${mel_script_name})
+
+    add_custom_target(${mel_script_name_no_ext} ALL
+        COMMAND ${CMAKE_COMMAND} -E make_directory
+                ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/$<CONFIG>/
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                ${mel_script}
+                ${mel_script_output_path}
+    )
+
+    target_sources(${mel_script_name_no_ext}
+        PRIVATE ${mel_script}
+    )
+
+    set_source_files_properties(${mel_script} 
+        TARGET_DIRECTORY ${mel_script_name_no_ext}
+        PROPERTIES HEADER_FILE_ONLY TRUE
+    )
+
+    add_dependencies(${LsystemMaya_TARGET_NAME} ${mel_script_name_no_ext})
+
+    install(FILES "${mel_script_output_path}" DESTINATION "plug-ins") #install
+
+endforeach()

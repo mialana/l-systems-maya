@@ -67,7 +67,7 @@ add_dependencies(${INSTALL_HELPER_TARGET_NAME} ${LsystemMaya_TARGET_NAME})
 set(DEPLOY_TARGET_NAME DEPLOY)
 add_custom_target(${DEPLOY_TARGET_NAME} COMMENT "Build plugin, install, and run maya")
 
-add_dependencies(${DEPLOY_TARGET_NAME} ${LsystemMaya_TARGET_NAME} ${INSTALL_HELPER_TARGET_NAME})
+add_dependencies(${DEPLOY_TARGET_NAME} ${INSTALL_HELPER_TARGET_NAME})
 
 set_target_properties(${DEPLOY_TARGET_NAME} PROPERTIES
     VS_DEBUGGER_COMMAND "${GLOBAL_MAYA_LOCATION}/bin/maya.exe"

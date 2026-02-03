@@ -19,7 +19,7 @@ constexpr const char k_GRAMMAR_LONG[] = "-grammar";
 constexpr const char k_ITERATIONS_SHORT[] = "-it";
 constexpr const char k_ITERATIONS_LONG[] = "-iterations";
 
-constexpr const char* k_CMD_FORMAT
+constexpr const char k_CMD_FORMAT[]
     = R"(curve -d 1 -p {0} {1} {2} -p {3} {4} {5} -k 0 -k 1 -name "curve{6}";
 circle -radius 0.1 -nr {7} {8} {9} -c {0} {1} {2} -name "nurbsCircle{6}";
 select -r nurbsCircle{6} curve{6};
@@ -66,7 +66,7 @@ MStatus LSystemCmd::createGeometry()
 
         cmd = cmdString.c_str();
         status = MGlobal::executeCommand(cmd);
-        CHECK_MSTATUS_AND_RETURN_IT(status);
+        CHECK_MSTATUS_AND_RETURN_IT_VERBOSE(status);
     }
 
     return status;
@@ -77,7 +77,7 @@ MStatus LSystemCmd::doIt(const MArgList& args)
     MStatus status;
 
     MArgDatabase argData(getSyntax(), args, &status);
-    CHECK_MSTATUS_AND_RETURN_IT(status);
+    CHECK_MSTATUS_AND_RETURN_IT_VERBOSE(status);
 
     static MString tmpGrammar;
 

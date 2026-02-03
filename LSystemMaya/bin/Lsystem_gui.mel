@@ -1,0 +1,66 @@
+global proc runCommand() {
+	global string $grammarGUI;
+    global string $stepSizeGUI;
+    global string $angleGUI;
+    global string $iterationsGUI;
+
+	string $grammar = `scrollField -query -text $grammarGUI`;
+    float $stepSize = `floatSliderGrp -query -value $stepSizeGUI`;
+    float $angle = `floatSliderGrp -query -value $angleGUI`;
+	int $iterations = `intSliderGrp -query -value $iterationsGUI`;
+
+    LSystemCmd -ss $stepSize -ag $angle -gr $grammar -it $iterations;
+};
+
+global proc browseFilesystem() {
+	global string $grammarGUI;
+
+	string $files[] = `fileDialog2 -fileMode 1 -caption "Select L-System grammar"`;
+	if (!size($files)) return;
+	string $selectedFilepath = $files[0];
+
+	int $file;
+	string $contents = "";
+
+	$file = fopen($selectedFilepath, "r");
+
+	if (!$file)
+    {
+        warning ("Could not open file: " + $selectedFilepath);
+        return;
+    }
+
+	string $line = "";
+	while (!`feof $file`)
+	{
+		$line = `fgetline $file`;
+		$contents += $line;
+	}
+	scrollField -edit -text $contents $grammarGUI;;
+}
+
+global proc createGUI()
+{
+	global string $grammarGUI;
+    global string $stepSizeGUI;
+    global string $angleGUI;
+    global string $iterationsGUI;
+
+	string $windowID = `window -title "Call LSystem Command" -widthHeight 400 400 -backgroundColor 0.75 0.75 0.75 -titleBar true`;
+	frameLayout -label "LSystem Strings" -collapse false;
+		$grammarGUI = `scrollField -wordWrap true`;
+		button -label "Browse" -height 28 -command "browseFilesystem()";
+	setParent ..;
+
+	frameLayout -label "Config" -collapse false;
+		columnLayout;
+			$stepSizeGUI = `floatSliderGrp -label "Default Step Size" -field true -minValue 0.0 -maxValue 50.0 -fieldMinValue 0.0 -fieldMaxValue 50.0 -value 22.5` ;
+			$angleGUI = `floatSliderGrp -label "Default Angle" -field true -minValue 0.0 -maxValue 180.0 -fieldMinValue 0.0 -fieldMaxValue 180.0 -value 5.0` ;
+			$iterationsGUI = `intSliderGrp -label "Iterations" -field true -minValue 1 -maxValue 100 -fieldMinValue 1 -fieldMaxValue 100 -value 2` ;
+		setParent ..;
+	setParent ..;
+
+	button -label "Generate!" -height 28 -command ("runCommand()");
+
+	showWindow;
+};
