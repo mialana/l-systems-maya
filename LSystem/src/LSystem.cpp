@@ -38,6 +38,7 @@ const std::string& LSystem::getGrammarString() const
 
 void LSystem::reset()
 {
+    mGrammar = "";
     current = "";
     iterations.clear();
     productions.clear();

@@ -1,11 +1,14 @@
 #include "LSystemCmd.h"
 
+#include <format>
+#include <string>
+
 #include <maya/MGlobal.h>
 #include <maya/MArgDatabase.h>
 #include <maya/MSyntax.h>
 #include <maya/MPxCommand.h>
-#include <format>
-#include <string>
+
+#include "macros.h"
 
 constexpr const char k_STEP_SIZE_SHORT[] = "-ss";
 constexpr const char k_STEP_SIZE_LONG[] = "-stepSize";
@@ -25,10 +28,6 @@ circle -radius 0.1 -nr {7} {8} {9} -c {0} {1} {2} -name "nurbsCircle{6}";
 select -r nurbsCircle{6} curve{6};
 extrude -ch true -rn false -po 1 -et 2 -rotation 0 -scale 1 -rsp 1 "nurbsCircle{6}" "curve{6}")";
 
-LSystemCmd::LSystemCmd() : MPxCommand() {}
-
-LSystemCmd::~LSystemCmd() {}
-
 static MSyntax getSyntax()
 {
     MSyntax syntax;
@@ -39,25 +38,31 @@ static MSyntax getSyntax()
     return syntax;
 }
 
+LSystemCmd::~LSystemCmd()
+{
+    mSystem.reset();
+    mBranches.clear();
+}
+
 MStatus LSystemCmd::createGeometry()
 {
     // configure l-system base code
     mSystem.loadProgramFromString(mGrammar);
     mSystem.setDefaultAngle(mAngle);
     mSystem.setDefaultStep(mStepSize);
-    std::vector<LSystem::Branch> branches;
-    mSystem.process(this->mIterations, branches);
+
+    mBranches.clear();
+    mSystem.process(this->mIterations, mBranches);
 
     static vec3 radius;
     static uint32_t label;
     static MString cmd;
     static std::string cmdString;
 
-    MStatus status;
-    for (uint32_t iter = 0; iter < branches.size(); iter++)
+    for (uint32_t i = 0; i < mBranches.size(); i++)
     {
-        label = iter + 1;
-        const LSystem::Branch& branch = branches[iter];
+        label = i + 1;
+        const LSystem::Branch& branch = mBranches[i];
         const vec3& start = branch.first;
         const vec3& end = branch.second;
 
@@ -65,11 +70,10 @@ MStatus LSystemCmd::createGeometry()
                                 label, radius[0], radius[1], radius[2]);
 
         cmd = cmdString.c_str();
-        status = MGlobal::executeCommand(cmd);
-        CHECK_MSTATUS_AND_RETURN_IT_VERBOSE(status);
+        CHECK_MSTATUS_AND_RETURN_IT_VERBOSE(MGlobal::executeCommand(cmd), "Execute Generate");
     }
 
-    return status;
+    return MStatus::kSuccess;
 }
 
 MStatus LSystemCmd::doIt(const MArgList& args)
@@ -77,7 +81,7 @@ MStatus LSystemCmd::doIt(const MArgList& args)
     MStatus status;
 
     MArgDatabase argData(getSyntax(), args, &status);
-    CHECK_MSTATUS_AND_RETURN_IT_VERBOSE(status);
+    CHECK_MSTATUS_AND_RETURN_IT_VERBOSE(status, "Get Command Arguments");
 
     static MString tmpGrammar;
 

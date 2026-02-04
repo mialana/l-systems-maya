@@ -5,25 +5,10 @@
 
 #include <LSystem.h>
 
-#define CHECK_MSTATUS_AND_RETURN_IT_VERBOSE(_status)                                               \
-    {                                                                                              \
-        MStatus _s = (_status);                                                                    \
-        if (_s == MStatus::kSuccess)                                                               \
-        {                                                                                          \
-            MGlobal::displayInfo("Operation successful!");                                         \
-        }                                                                                          \
-        else                                                                                       \
-        {                                                                                          \
-            MString err = "Operation failed: " + _s.errorString();                                 \
-            MGlobal::displayError(err);                                                            \
-            return _s;                                                                             \
-        }                                                                                          \
-    }
-
 class LSystemCmd : public MPxCommand
 {
 public:
-    LSystemCmd();
+    LSystemCmd() = default;
     virtual ~LSystemCmd();
 
     static void* creator()
@@ -35,11 +20,12 @@ public:
     MStatus doIt(const MArgList& args);
 
     // stored arguments as normal C data structures
+    std::string mGrammar;
     double mStepSize = 22.5;
     double mAngle = 1.0;
-    string mGrammar;
     int32_t mIterations = 3;
 
 private:
     LSystem mSystem;
+    std::vector<LSystem::Branch> mBranches;
 };

@@ -1,33 +1,25 @@
+#include <format>
+
 #include <maya/MPxCommand.h>
 #include <maya/MFnPlugin.h>
-#include <maya/MIOStream.h>
 #include <maya/MString.h>
-#include <maya/MArgList.h>
 #include <maya/MGlobal.h>
-#include <maya/MSimple.h>
-#include <maya/MDoubleArray.h>
-#include <maya/MPoint.h>
-#include <maya/MPointArray.h>
-#include <maya/MFnNurbsCurve.h>
-#include <maya/MDGModifier.h>
-#include <maya/MPlugArray.h>
-#include <maya/MVector.h>
-#include <maya/MFnDependencyNode.h>
-#include <maya/MStringArray.h>
-#include <format>
-#include <list>
 
 #include "LSystemCmd.h"
+#include "LSystemNode.h"
+#include "macros.h"
 
 constexpr char k_GUI_NAME[] = "LSystemGUI";
-constexpr char k_MENU_ITEM_CMD_FN[] = "createGUI";
+constexpr char k_MENU_ITEM_CMD_FN[] = "createLSystemGUI";
+constexpr char k_MENU_ITEM_NODE_FN[] = "createLSystemNode";
 
 constexpr char k_INSTALL_MENU_FMT[] = R"mel(
-    if (`menu -exists {0}`)
+    if (`control -exists {0}`)
         deleteUI {0};
 
     menu -label "LSystem GUI" -parent "MayaWindow" -tearOff true {0};
     menuItem -label "LSystemCommand" -command "{1}";
+    menuItem -label "LSystemNode" -command ("{2}");
     )mel";
 
 constexpr char k_UNINSTALL_MENU_FMT[] = "deleteUI {0};";
@@ -38,13 +30,21 @@ MStatus initializePlugin(MObject obj)
     MFnPlugin plugin(obj, "MyPlugin", "1.0", "Any");
 
     // Register Command
-    CHECK_MSTATUS_AND_RETURN_IT_VERBOSE(plugin.registerCommand("LSystemCmd", LSystemCmd::creator));
+    CHECK_MSTATUS_AND_RETURN_IT_VERBOSE(plugin.registerCommand("LSystemCmd", LSystemCmd::creator),
+                                        "Command Registration");
+    CHECK_MSTATUS_AND_RETURN_IT_VERBOSE(plugin.registerNode("LSystemNode", LSystemNode::kNodeId,
+                                                            LSystemNode::creator,
+                                                            LSystemNode::initialize),
+                                        "Register Node");
 
-    CHECK_MSTATUS_AND_RETURN_IT_VERBOSE(
-        MGlobal::executeCommand("source \"" + plugin.loadPath() + "/LSystem_gui.mel\""));
+    CHECK_MSTATUS_AND_RETURN_IT_VERBOSE(MGlobal::executeCommand("source \"" + plugin.loadPath()
+                                                                + "/LSystem_gui.mel\""),
+                                        "Source GUI MEL Script");
 
     status = MGlobal::executeCommandOnIdle(
-        std::format(k_INSTALL_MENU_FMT, k_GUI_NAME, k_MENU_ITEM_CMD_FN).c_str());
+        std::format(k_INSTALL_MENU_FMT, k_GUI_NAME, k_MENU_ITEM_CMD_FN, k_MENU_ITEM_NODE_FN).c_str());
+
+    CHECK_MSTATUS_AND_RETURN_IT_VERBOSE(status, "Install Menu");
 
     return status;
 }
@@ -54,10 +54,14 @@ MStatus uninitializePlugin(MObject obj)
     MStatus status = MStatus::kSuccess;
     MFnPlugin plugin(obj);
 
-    status = plugin.deregisterCommand("LSystemCmd");
-    CHECK_MSTATUS_AND_RETURN_IT_VERBOSE(status);
+    CHECK_MSTATUS_AND_RETURN_IT_VERBOSE(plugin.deregisterCommand("LSystemCmd"),
+                                        "Command Deregistration");
+
+    CHECK_MSTATUS_AND_RETURN_IT_VERBOSE(plugin.deregisterNode(LSystemNode::kNodeId),
+                                        "Deregister Node");
 
     status = MGlobal::executeCommand(std::format(k_UNINSTALL_MENU_FMT, k_GUI_NAME).c_str());
+    CHECK_MSTATUS_AND_RETURN_IT_VERBOSE(status, "Uninstall Menu");
 
     return status;
 }

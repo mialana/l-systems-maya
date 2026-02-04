@@ -34,14 +34,15 @@ public:
     void process(unsigned int n, std::vector<Branch>& branches);
     void process(unsigned int n, std::vector<Branch>& branches, std::vector<Geometry>& models);
 
-protected:
     void reset();
+
+protected:
     void addProduction(std::string line);
     std::string iterate(const std::string& input);
 
     std::map<std::string, std::string> productions;
     std::vector<std::string> iterations;
-    std::vector<std::pair<vec3, vec3>> bboxes;
+
     std::string current;
     float mDfltAngle;
     float mDfltStep;

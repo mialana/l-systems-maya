@@ -16,17 +16,17 @@ set(SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/cylinder.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/LSystemCmd.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/PluginMain.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/LSystemNode.cpp
     ${${Lsystem_TARGET_NAME}_SOURCE_FILES}
 )
 
 
 # Add header files to the project
 set(HEADERS
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/macros.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/cylinder.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/LSystemCmd.h
-    ${LSystem_SOURCE_DIR}/LSystem.h
-    ${LSystem_SOURCE_DIR}/matrix.h
-    ${LSystem_SOURCE_DIR}/vec.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/LSystemNode.h
     ${${Lsystem_TARGET_NAME}_HEADER_FILES}
 )
 

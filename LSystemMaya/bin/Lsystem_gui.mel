@@ -1,3 +1,12 @@
+global proc createLSystemNode() {
+	createNode transform -n LSystem1;
+	createNode mesh -n LSystemShape1 -p LSystem1;
+	sets -add initialShadingGroup LSystemShape1;
+	createNode LSystemNode -n LSystemNode1;
+	connectAttr time1.outTime LSystemNode1.time;
+	connectAttr LSystemNode1.outputMesh LSystemShape1.inMesh;
+}
+
 global proc runCommand() {
 	global string $grammarGUI;
     global string $stepSizeGUI;
@@ -39,7 +48,7 @@ global proc browseFilesystem() {
 	scrollField -edit -text $contents $grammarGUI;;
 }
 
-global proc createGUI()
+global proc createLSystemGUI()
 {
 	global string $grammarGUI;
     global string $stepSizeGUI;
